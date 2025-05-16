@@ -16,13 +16,10 @@ if [ ! -f "${SCRIPT_DIR}/build/hdfs_client" ]; then
 fi
 
 # Create package version from date or tag if available
-VERSION=$(date +"%Y%m%d")
-if [ -n "$(git describe --tags 2>/dev/null)" ]; then
-    VERSION=$(git describe --tags)
-fi
+VERSION=1.0.0
 
 # Create package name
-PACKAGE_NAME="hdfs-client-${VERSION}"
+PACKAGE_NAME="hdfs-client-cpp-${VERSION}"
 PACKAGE_DIR="${SCRIPT_DIR}/package/${PACKAGE_NAME}"
 
 # Clean previous package if exists
@@ -62,7 +59,7 @@ fi
 
 # Create tarball
 echo "Creating package archive..."
-TARBALL="${SCRIPT_DIR}/package/hdfs-client-${VERSION}.tar.gz"
+TARBALL="${SCRIPT_DIR}/package/hdfs-client-cpp-${VERSION}.tar.gz"
 tar -czf "${TARBALL}" -C "${SCRIPT_DIR}/package" "${PACKAGE_NAME}"
 
 echo "==== Packaging Completed Successfully ===="

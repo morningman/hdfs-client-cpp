@@ -72,8 +72,7 @@ int main(int argc, char* argv[]) {
         std::string content;
         
         if (client.readFile(path, content)) {
-            std::cout << "Content of " << path << ":" << std::endl;
-            std::cout << content << std::endl;
+            std::cout << "Successfully read " << content.size() << " bytes from " << path << std::endl;
         } else {
             std::cerr << "Failed to read file: " << path << std::endl;
         }
@@ -83,7 +82,7 @@ int main(int argc, char* argv[]) {
         std::string content = argv[3];
         
         if (client.writeFile(path, content)) {
-            std::cout << "Successfully wrote to file: " << path << std::endl;
+            std::cout << "Successfully wrote " << content.size() << " bytes to file: " << path << std::endl;
         } else {
             std::cerr << "Failed to write to file: " << path << std::endl;
         }
