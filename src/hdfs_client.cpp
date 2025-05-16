@@ -162,18 +162,27 @@ bool HdfsClient::readFile(const std::string& path, std::string& content) {
     tSize fileSize = fileInfo->mSize;
     hdfsFreeFileInfo(fileInfo, 1);
     
-    std::vector<char> buffer(fileSize + 1, 0);
+    // Limit reading to at most 4096 bytes
+    const tSize maxReadSize = 4096;
+    tSize bytesToRead = (fileSize > maxReadSize) ? maxReadSize : fileSize;
     
-    tSize bytesRead = hdfsRead(fs_, file, buffer.data(), fileSize);
+    std::vector<char> buffer(bytesToRead + 1, 0);
+    
+    tSize bytesRead = hdfsRead(fs_, file, buffer.data(), bytesToRead);
     hdfsCloseFile(fs_, file);
     
-    if (bytesRead != fileSize) {
-        std::cerr << "Failed to read complete file: " << path << std::endl;
-        std::cerr << "Read " << bytesRead << " of " << fileSize << " bytes" << std::endl;
+    if (bytesRead != bytesToRead) {
+        std::cerr << "Failed to read requested bytes: " << path << std::endl;
+        std::cerr << "Read " << bytesRead << " of " << bytesToRead << " bytes" << std::endl;
         return false;
     }
     
     content.assign(buffer.data(), bytesRead);
+    
+    // If file was larger than maxReadSize, log that we truncated it
+    if (fileSize > maxReadSize) {
+        std::cout << "Note: File size (" << fileSize << " bytes) exceeds maximum read size. Content truncated to " << maxReadSize << " bytes." << std::endl;
+    }
     
     return true;
 }

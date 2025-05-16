@@ -11,7 +11,10 @@ conf/log4j.properties
 go.sh
 
 # Third-party libraries
-thirdparty/
+thirdparty/installed/
+
+hdfs_client
+package/*
 
 # Misc
 .DS_Store
