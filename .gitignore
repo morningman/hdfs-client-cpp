@@ -1,0 +1,23 @@
+# Build directory
+build/
+
+# Configuration files
+conf/client.conf
+conf/core-site.xml
+conf/hdfs-site.xml
+conf/log4j.properties
+
+# Shell scripts
+go.sh
+
+# Third-party libraries
+thirdparty/
+
+# Misc
+.DS_Store
+.vscode/
+.idea/
+*.o
+*.so
+*.a
+*.dylib 
