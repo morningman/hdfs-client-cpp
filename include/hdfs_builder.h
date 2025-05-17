@@ -89,6 +89,8 @@ public:
      * @return HDFS file system handle, or nullptr if connection fails
      */
     hdfsFS connect();
+
+    hdfsBuilder* get() { return builder_; }
     
 private:
     // hdfsBuilder instance

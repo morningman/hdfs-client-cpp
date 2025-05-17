@@ -48,6 +48,7 @@ bool HdfsClient::connect() {
         return false;
     }
     std::string hdfsUri = defaultFs;
+    std::cout << "HDFS_DEFAULT_FS is: " << hdfsUri << std::endl;
     builder.setNameNode(hdfsUri);
 
     // Configure necessary filesystem implementation classes

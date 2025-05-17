@@ -8,6 +8,7 @@ HdfsBuilder::HdfsBuilder() : useDefault_(false) {
     if (!builder_) {
         std::cerr << "Failed to create hdfsBuilder instance" << std::endl;
     }
+    hdfsBuilderSetForceNewInstance(builder_);
 }
 
 HdfsBuilder::~HdfsBuilder() {
