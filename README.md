@@ -140,3 +140,8 @@ export CLASSPATH=$(hadoop classpath --glob)
 - libhdfs (statically linked)
 - JNI (Java Native Interface)
 - pthreads (POSIX Threads) 
+
+## Examples
+
+`sh run.sh --fs=hdfs://hdfs-cluster list hdfs://hdfs-cluster/tmp/`
+
