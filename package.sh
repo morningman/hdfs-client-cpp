@@ -9,11 +9,9 @@ set -x
 # Get the script directory
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# Check if the project has been built
-if [ ! -f "${SCRIPT_DIR}/build/hdfs_client" ]; then
-    echo "hdfs_client executable not found. run build.sh first."
-    ${SCRIPT_DIR}/build.sh
-fi
+# Always rebuild the project
+echo "Rebuilding the project..."
+${SCRIPT_DIR}/build.sh
 
 # Create package version from date or tag if available
 VERSION=1.0.0
@@ -51,7 +49,7 @@ cp "${SCRIPT_DIR}/README.md" "${PACKAGE_DIR}/"
 # Copy required third-party libraries
 echo "Copying Hadoop HDFS libraries..."
 if [ -d "${SCRIPT_DIR}/thirdparty/installed/lib/hadoop_hdfs" ]; then
-    cp -r "${SCRIPT_DIR}/thirdparty/installed/lib/hadoop_hdfs" "${PACKAGE_DIR}/thirdparty/installed/lib/"
+    cp -r "${SCRIPT_DIR}/thirdparty/installed/lib/hadoop_hdfs"* "${PACKAGE_DIR}/thirdparty/installed/lib/"
 else
     echo "Warning: Hadoop HDFS libraries not found. Package may not work without them."
     echo "Please run thirdparty/download.sh first and then rebuild."

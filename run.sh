@@ -62,13 +62,23 @@ if [ ! -f "$HDFS_SITE" ]; then
     echo "Consider adding hdfs-site.xml to $HADOOP_CONF_DIR"
 fi
 
-# Set default CLASSPATH with project-specific JAR directories
-HADOOP_JAR_DIRS=(
-    "${PROJECT_ROOT}/thirdparty/installed/lib/hadoop_hdfs/common"
-    "${PROJECT_ROOT}/thirdparty/installed/lib/hadoop_hdfs/common/lib"
-    "${PROJECT_ROOT}/thirdparty/installed/lib/hadoop_hdfs/hdfs"
-    "${PROJECT_ROOT}/thirdparty/installed/lib/hadoop_hdfs/hdfs/lib"
-)
+if [[ -n "${HADOOP_VERSION}" ]]; then
+    echo "Using Hadoop version: ${HADOOP_VERSION}"
+    HADOOP_JAR_DIRS=(
+        "${PROJECT_ROOT}/thirdparty/installed/lib/hadoop_hdfs-${HADOOP_VERSION}/common"
+        "${PROJECT_ROOT}/thirdparty/installed/lib/hadoop_hdfs-${HADOOP_VERSION}/common/lib"
+        "${PROJECT_ROOT}/thirdparty/installed/lib/hadoop_hdfs-${HADOOP_VERSION}/hdfs"
+        "${PROJECT_ROOT}/thirdparty/installed/lib/hadoop_hdfs-${HADOOP_VERSION}/hdfs/lib"
+    )
+else
+    echo "Using default Hadoop version from pom.xml"
+    HADOOP_JAR_DIRS=(
+        "${PROJECT_ROOT}/thirdparty/installed/lib/hadoop_hdfs/common"
+        "${PROJECT_ROOT}/thirdparty/installed/lib/hadoop_hdfs/common/lib"
+        "${PROJECT_ROOT}/thirdparty/installed/lib/hadoop_hdfs/hdfs"
+        "${PROJECT_ROOT}/thirdparty/installed/lib/hadoop_hdfs/hdfs/lib"
+    )
+fi
 
 # Initialize CLASSPATH with project JAR files if not already set
 if [ -z "$CLASSPATH" ]; then
@@ -91,6 +101,7 @@ fi
 
 # Initialize default FileSystem URI
 FS_DEFAULT_FS="hdfs://hdfs-cluster"
+HADOOP_VERSION=""
 
 # Process options
 ARGS=()
@@ -137,6 +148,10 @@ while [ $# -gt 0 ]; do
             export JAVA_OPTS="$JAVA_OPTS -Dfs.defaultFS=$FS_DEFAULT_FS"
             # Set environment variable for the client
             export HDFS_DEFAULT_FS="$FS_DEFAULT_FS"
+            shift
+            ;;
+        --hadoop-version=*)
+            HADOOP_VERSION="${1#*=}"
             shift
             ;;
         --help)
